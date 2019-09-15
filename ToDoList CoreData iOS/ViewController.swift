@@ -11,6 +11,7 @@ import UIKit
 class ViewController: UIViewController {
 
     @IBOutlet weak var taskTextField: UITextField!
+    @IBOutlet weak var error: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,14 +22,19 @@ class ViewController: UIViewController {
     
     @IBAction func buttonTapped(_ sender: RoundButton) {
         
-        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-        let task = Task(context: context)
-        task.name = taskTextField.text
+        if taskTextField.text?.trimmingCharacters(in: .whitespaces) == "" {
+            error.isHidden = false
+            
+        } else {
+            let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+            let task = Task(context: context)
+            task.name = taskTextField.text
         
-        // Save the data to Cor Data
-        (UIApplication.shared.delegate as! AppDelegate).saveContext()
+            // Save the data to Cor Data
+            (UIApplication.shared.delegate as! AppDelegate).saveContext()
         
-        let _ = navigationController?.popViewController(animated: true)
+            navigationController?.popViewController(animated: true)
+        }
     }
     
 
